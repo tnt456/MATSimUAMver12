@@ -17,7 +17,7 @@ public interface UAMTask extends Task {
 
 	void addRequest(UAMRequest request);
 
-	enum UAMTaskType {
+	enum UAMTaskType implements TaskType {
 		PICKUP, DROPOFF, FLY, STAY, PARK, TURNAROUND
 	}
 

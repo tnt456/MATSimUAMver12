@@ -14,8 +14,7 @@ import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.network.io.MatsimNetworkReader;
 import org.matsim.core.router.MainModeIdentifier;
 import org.matsim.core.router.MainModeIdentifierImpl;
-import org.matsim.core.router.StageActivityTypes;
-import org.matsim.core.router.StageActivityTypesImpl;
+import org.matsim.core.router.StageActivityTypeIdentifier;
 import org.matsim.pt.PtConstants;
 
 import java.io.IOException;
@@ -41,8 +40,7 @@ public class ConvertTripsFromEvents {
 		new MatsimNetworkReader(netw).readFile(network);
 
 		// Add UAM stage activity types
-		StageActivityTypes stageActivityTypes = new StageActivityTypesImpl(PtConstants.TRANSIT_ACTIVITY_TYPE,
-				UAMConstants.interaction);
+		StageActivityTypeIdentifier stageActivityTypes = new StageActivityTypeIdentifier();
 
 		HomeActivityTypes homeActivityTypes = new BasicHomeActivityTypes();
 		MainModeIdentifier mainModeIdentifier = new UAMMainModeIdentifier(new MainModeIdentifierImpl());

@@ -9,7 +9,6 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.contrib.dvrp.optimizer.Request;
 import org.matsim.contrib.dvrp.passenger.PassengerRequest;
-import org.matsim.core.mobsim.framework.MobsimPassengerAgent;
 
 /**
  * This class defines the UAM Request and its properties.
@@ -21,7 +20,7 @@ public class UAMRequest implements PassengerRequest {
 	final private double submissionTime;
 	final private Link originLink;
 	final private Link destinationLink;
-	final private MobsimPassengerAgent passengerAgent;
+	final private Id<Person> id1;
 	private final double quantity;
 	private final double earliestStartTime;
 	private final double latestStartTime;
@@ -30,7 +29,7 @@ public class UAMRequest implements PassengerRequest {
 	private UAMDispatcher dispatcher;
 	private double distance;
 
-	public UAMRequest(Id<Request> id, MobsimPassengerAgent passengerAgent, Link originLink, Link destinationLink,
+	public UAMRequest(Id<Request> id, Id<Person> id1, Link originLink, Link destinationLink,
                       double pickupTime, double submissionTime, UAMDispatcher dispatcher, double distance) {
 		this.id = id;
 		this.submissionTime = submissionTime;
@@ -39,7 +38,7 @@ public class UAMRequest implements PassengerRequest {
 		this.destinationLink = destinationLink;
 		this.earliestStartTime = pickupTime;
 		this.latestStartTime = pickupTime;
-		this.passengerAgent = passengerAgent;
+		this.id1 = id1;
 		this.dispatcher = dispatcher;
 		this.distance = distance;
 	}
@@ -63,15 +62,6 @@ public class UAMRequest implements PassengerRequest {
 		return this.submissionTime;
 	}
 
-	@Override
-	public boolean isRejected() {
-		return false;
-	}
-
-	@Override
-	public void setRejected(boolean rejected) {
-		// do nothing
-	}
 
 	@Override
 	public Id<Request> getId() {
@@ -80,7 +70,7 @@ public class UAMRequest implements PassengerRequest {
 
 	@Override
 	public Id<Person> getPassengerId() {
-		return passengerAgent.getId();
+		return id1;
 	}
 
 	@Override
@@ -91,10 +81,6 @@ public class UAMRequest implements PassengerRequest {
 	@Override
 	public Link getToLink() {
 		return this.destinationLink;
-	}
-
-	public MobsimPassengerAgent getPassenger() {
-		return this.passengerAgent;
 	}
 
 	@Override

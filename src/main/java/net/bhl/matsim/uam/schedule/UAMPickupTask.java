@@ -3,7 +3,7 @@ package net.bhl.matsim.uam.schedule;
 import net.bhl.matsim.uam.passenger.UAMRequest;
 import net.bhl.matsim.uam.vrpagent.UAMActionCreator;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.schedule.StayTaskImpl;
+import org.matsim.contrib.dvrp.schedule.StayTask;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,12 +15,12 @@ import java.util.Set;
  *
  * @author balacmi (Milos Balac), RRothfeld (Raoul Rothfeld)
  */
-public class UAMPickupTask extends StayTaskImpl implements UAMTask {
+public class UAMPickupTask extends StayTask implements UAMTask {
 	private final Set<UAMRequest> requests = new HashSet<>();
 	private final double boardingTime;
 
 	public UAMPickupTask(double beginTime, double endTime, Link link, double boardingTime) {
-		super(beginTime, endTime, link);
+		super(UAMTaskType.PICKUP,beginTime, endTime, link);
 		this.boardingTime = boardingTime;
 	}
 
@@ -57,7 +57,11 @@ public class UAMPickupTask extends StayTaskImpl implements UAMTask {
 	@Override
 	public String toString() {
 		return UAMActionCreator.PICKUP_ACTIVITY_TYPE + "Task(" + (this.getName() != null ? this.getName() : "")
-				+ "@" + this.getLink().getId() + ")" + commonToString();
+				+ "@" + this.getLink().getId() + ")" ;
+	}
+
+	private String getName() {
+		return null;
 	}
 
 }

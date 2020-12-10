@@ -13,7 +13,7 @@ import org.matsim.core.api.experimental.events.TeleportationArrivalEvent;
 import org.matsim.core.api.experimental.events.handler.TeleportationArrivalEventHandler;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.router.MainModeIdentifier;
-import org.matsim.core.router.StageActivityTypes;
+import org.matsim.core.router.StageActivityTypeIdentifier;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.geometry.CoordUtils;
 import org.matsim.vehicles.Vehicle;
@@ -28,7 +28,7 @@ import java.util.*;
 public class TripListener implements ActivityStartEventHandler, ActivityEndEventHandler, PersonDepartureEventHandler,
 		PersonEntersVehicleEventHandler, PersonLeavesVehicleEventHandler, LinkEnterEventHandler,
 		PersonStuckEventHandler, TeleportationArrivalEventHandler {
-	final private StageActivityTypes stageActivityTypes;
+	final private StageActivityTypeIdentifier stageActivityTypes;
 	final private HomeActivityTypes homeActivityTypes;
 	final private MainModeIdentifier mainModeIdentifier;
 	final private Network network;
@@ -40,7 +40,7 @@ public class TripListener implements ActivityStartEventHandler, ActivityEndEvent
 	final private Map<Id<Vehicle>, Collection<Id<Person>>> passengers = new HashMap<>();
 	final private Map<Id<Person>, Integer> tripIndex = new HashMap<>();
 
-	public TripListener(Network network, StageActivityTypes stageActivityTypes, HomeActivityTypes homeActivityTypes,
+	public TripListener(Network network, StageActivityTypeIdentifier stageActivityTypes, HomeActivityTypes homeActivityTypes,
 						MainModeIdentifier mainModeIdentifier, Collection<String> networkRouteModes) {
 		this.network = network;
 		this.stageActivityTypes = stageActivityTypes;
@@ -64,7 +64,7 @@ public class TripListener implements ActivityStartEventHandler, ActivityEndEvent
 
 	@Override
 	public void handleEvent(ActivityEndEvent event) {
-		if (!stageActivityTypes.isStageActivity(event.getActType())) {
+		if (!StageActivityTypeIdentifier.isStageActivity(event.getActType())) {
 			Integer personTripIndex = tripIndex.get(event.getPersonId());
 			network.getLinks().get(event.getLinkId()).getCoord();
 
@@ -105,7 +105,7 @@ public class TripListener implements ActivityStartEventHandler, ActivityEndEvent
 
 	@Override
 	public void handleEvent(ActivityStartEvent event) {
-		if (stageActivityTypes.isStageActivity(event.getActType())) {
+		if (StageActivityTypeIdentifier.isStageActivity(event.getActType())) {
 			ongoing.get(event.getPersonId()).elements
 					.add(factory.createActivityFromLinkId(event.getActType(), event.getLinkId()));
 		} else {

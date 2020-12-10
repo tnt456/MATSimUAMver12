@@ -6,8 +6,8 @@ import net.bhl.matsim.uam.infrastructure.UAMStationSimple;
 import net.bhl.matsim.uam.infrastructure.UAMVehicle;
 import net.bhl.matsim.uam.infrastructure.UAMVehicleType;
 import net.bhl.matsim.uam.run.UAMConstants;
+import net.bhl.matsim.uam.schedule.UAMStayTask;
 import org.jfree.util.Log;
-import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
@@ -119,6 +119,7 @@ public class UAMXMLReader extends MatsimXmlParser {
 
 					UAMVehicle vehicle = new UAMVehicle(fleetSpecification.getVehicleSpecifications().get(id),
 							this.stations.get(stationid).getLocationLink(), stationid, vehicleTypes.get(vehicleTypeId));
+					vehicle.getSchedule().addTask(new UAMStayTask(vehicle.getServiceBeginTime(), Double.POSITIVE_INFINITY, vehicle.getStartLink()));
 
 					vehicles.put(id, vehicle);
 					UAMVehicle vehicleCopy = new UAMVehicle(fleetSpecification.getVehicleSpecifications().get(id),

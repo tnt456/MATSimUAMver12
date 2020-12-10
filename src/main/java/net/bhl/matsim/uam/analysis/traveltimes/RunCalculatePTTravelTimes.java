@@ -19,6 +19,7 @@ import org.matsim.core.router.LinkWrapperFacility;
 import org.matsim.core.router.RoutingModule;
 import org.matsim.core.router.TeleportationRoutingModule;
 import org.matsim.core.scenario.ScenarioUtils;
+import org.matsim.core.utils.misc.OptionalTime;
 import org.matsim.pt.router.TransitRouter;
 
 import java.io.BufferedWriter;
@@ -75,7 +76,7 @@ public class RunCalculatePTTravelTimes {
 		for (int i = 0; i < processes; i++) {
 			Map<String, RoutingModule> router = new HashMap<>();
 			router.put(TransportMode.pt, new TeleportationRoutingModule(TransportMode.pt,
-					scenario.getPopulation().getFactory(), 0, 1.5));
+					scenario, 0, 1.5));
 			ptRouters.add(new SwissRailRaptor(data, new DefaultRaptorParametersForPerson(config),
 					new LeastCostRaptorRouteSelector(),
 					new DefaultRaptorStopFinder(null, new DefaultRaptorIntermodalAccessEgress(), router)));
@@ -170,7 +171,7 @@ public class RunCalculatePTTravelTimes {
 				for (Leg leg : legs) {
 					if (time != 0 && writeDescription)
 						routeList.append("->");
-					time += leg.getTravelTime();
+					time += leg.getTravelTime().seconds();
 					distance += leg.getRoute().getDistance();
 					if (writeDescription) {
 						routeList.append("[mode:").append(leg.getMode()).append("]");

@@ -5,12 +5,12 @@ import net.bhl.matsim.uam.infrastructure.UAMVehicle;
 import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.dvrp.fleet.DvrpVehicle;
 import org.matsim.contrib.dvrp.fleet.Fleet;
-import org.matsim.contrib.dvrp.fleet.FleetImpl;
+
 
 import java.util.Map;
 
 /**
- * An implementation of {@link FleetImpl} for a UAM vehicles fleet.
+ * An implementation of {@link Fleet} for a UAM vehicles fleet.
  *
  * @author balacmi (Milos Balac), RRothfeld (Raoul Rothfeld)
  */
@@ -22,7 +22,7 @@ public class UAMFleetData implements Fleet {
 	}
 
 	@Override
-	public Map<Id<DvrpVehicle>, ? extends DvrpVehicle> getVehicles() {
+	public ImmutableMap<Id<DvrpVehicle>, DvrpVehicle> getVehicles() {
 		return ImmutableMap.copyOf(vehicles);
 	}
 

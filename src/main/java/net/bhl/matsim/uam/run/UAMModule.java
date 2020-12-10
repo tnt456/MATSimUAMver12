@@ -25,11 +25,10 @@ import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.dvrp.passenger.DefaultPassengerRequestValidator;
 import org.matsim.contrib.dvrp.passenger.PassengerRequestValidator;
-import org.matsim.contrib.dvrp.router.DvrpRoutingNetworkProvider;
+import org.matsim.contrib.dvrp.router.DvrpGlobalRoutingNetworkProvider;
 import org.matsim.contrib.dvrp.run.DvrpModes;
 import org.matsim.contrib.dvrp.trafficmonitoring.DvrpTravelTimeModule;
 import org.matsim.contrib.dvrp.vrpagent.VrpAgentSourceQSimModule;
-import org.matsim.contrib.dynagent.run.DynActivityEngineModule;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.router.DijkstraFactory;
 import org.matsim.core.router.MainModeIdentifier;
@@ -59,13 +58,53 @@ public class UAMModule extends AbstractModule {
 		this.uamReader = uamReader;
 	}
 
+
+	@Provides
+	@Singleton
+	@Named(UAMConstants.uam)
+	private ParallelLeastCostPathCalculator provideParallelLeastCostPathCalculator(UAMConfigGroup uamConfig,
+																				   @Named(UAMConstants.uam) TravelTime travelTime) {
+		int parallelRouters = uamConfig.getParallelRouters();
+		if (1 == parallelRouters) {
+			return new SerialLeastCostPathCalculator(new DijkstraFactory().createPathCalculator(networkUAM,
+					new OnlyTimeDependentTravelDisutility(travelTime), travelTime));
+		} else {
+			return DefaultParallelLeastCostPathCalculator.create(parallelRouters, new DijkstraFactory(), networkUAM,
+					new OnlyTimeDependentTravelDisutility(travelTime), travelTime);
+		}
+	}
+
+	@Provides
+	@Singleton
+	@Named(UAMConstants.uam)
+	private ParallelLeastCostPathCalculatorShutdownListener provideParallelLeastCostPathCalculatorShutdownListener(
+			@Named(UAMConstants.uam) ParallelLeastCostPathCalculator calculator) {
+		return new ParallelLeastCostPathCalculatorShutdownListener(calculator);
+	}
+
+	@Provides
+	@Singleton
+	public UAMStationConnectionGraph provideUAMStationConnectionGraph(UAMManager uamManager, @Named(UAMConstants.uam) ParallelLeastCostPathCalculator plcpc) {
+		return new UAMStationConnectionGraph(uamManager, plcpc);
+	}
+
+
+	protected void configure() {
+		}
+
 	@Override
 	public void install() {
 		bind(DvrpModes.key(PassengerRequestValidator.class, UAMConstants.uam))
 				.toInstance(new DefaultPassengerRequestValidator());
 		installQSimModule(new UAMQsimModule(uamReader, uamManager));
-		installQSimModule(new DynActivityEngineModule());
 
+		bind(Network.class).annotatedWith(Names.named(DvrpGlobalRoutingNetworkProvider.DVRP_ROUTING))
+				.toInstance(this.networkUAM);
+		bind(Network.class).annotatedWith(Names.named(TransportMode.car)).toInstance(this.networkCar);
+
+		bind(Network.class).annotatedWith(Names.named(UAMConstants.uam))
+				.to(Key.get(Network.class, Names.named(DvrpGlobalRoutingNetworkProvider.DVRP_ROUTING)));
+		bind(Network.class).annotatedWith(DvrpModes.mode(UAMConstants.uam)).toInstance(networkUAM);
 		// bining our own scoring function factory
 		bind(ScoringFunctionFactory.class).to(UAMScoringFunctionFactory.class).asEagerSingleton();
 
@@ -104,42 +143,7 @@ public class UAMModule extends AbstractModule {
 		bind(TravelTime.class).annotatedWith(Names.named(UAMConstants.uam))
 				.to(Key.get(TravelTime.class, Names.named(DvrpTravelTimeModule.DVRP_ESTIMATED)));
 
-		bind(Network.class).annotatedWith(Names.named(DvrpRoutingNetworkProvider.DVRP_ROUTING))
-				.toInstance(this.networkUAM);
-		bind(Network.class).annotatedWith(Names.named(TransportMode.car)).toInstance(this.networkCar);
 
-		bind(Network.class).annotatedWith(Names.named(UAMConstants.uam))
-				.to(Key.get(Network.class, Names.named(DvrpRoutingNetworkProvider.DVRP_ROUTING)));
+
 	}
-
-	@Provides
-	@Singleton
-	@Named(UAMConstants.uam)
-	private ParallelLeastCostPathCalculator provideParallelLeastCostPathCalculator(UAMConfigGroup uamConfig,
-																				   @Named(UAMConstants.uam) TravelTime travelTime) {
-		int parallelRouters = uamConfig.getParallelRouters();
-		if (1 == parallelRouters) {
-			return new SerialLeastCostPathCalculator(new DijkstraFactory().createPathCalculator(networkUAM,
-					new OnlyTimeDependentTravelDisutility(travelTime), travelTime));
-		} else {
-			return DefaultParallelLeastCostPathCalculator.create(parallelRouters, new DijkstraFactory(), networkUAM,
-					new OnlyTimeDependentTravelDisutility(travelTime), travelTime);
-		}
-	}
-
-	@Provides
-	@Singleton
-	@Named(UAMConstants.uam)
-	private ParallelLeastCostPathCalculatorShutdownListener provideParallelLeastCostPathCalculatorShutdownListener(
-			@Named(UAMConstants.uam) ParallelLeastCostPathCalculator calculator) {
-		return new ParallelLeastCostPathCalculatorShutdownListener(calculator);
-	}
-
-	@Provides
-	@Singleton
-	public UAMStationConnectionGraph provideUAMStationConnectionGraph(UAMManager uamManager, @Named(UAMConstants.uam) ParallelLeastCostPathCalculator plcpc) {
-		return new UAMStationConnectionGraph(uamManager, plcpc);
-	}
-
-
 }

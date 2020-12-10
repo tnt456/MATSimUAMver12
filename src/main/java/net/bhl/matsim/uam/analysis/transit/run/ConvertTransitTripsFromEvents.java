@@ -7,8 +7,7 @@ import net.bhl.matsim.uam.analysis.transit.readers.EventsTransitTripReader;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.network.io.MatsimNetworkReader;
-import org.matsim.core.router.StageActivityTypes;
-import org.matsim.core.router.StageActivityTypesImpl;
+import org.matsim.core.router.StageActivityTypeIdentifier;
 import org.matsim.pt.PtConstants;
 
 import java.io.IOException;
@@ -34,7 +33,7 @@ public class ConvertTransitTripsFromEvents {
 		Network network = NetworkUtils.createNetwork();
 		new MatsimNetworkReader(network).readFile(networkfile);
 
-		StageActivityTypes stageActivityTypes = new StageActivityTypesImpl(PtConstants.TRANSIT_ACTIVITY_TYPE);
+		StageActivityTypeIdentifier stageActivityTypes = new StageActivityTypeIdentifier();
 
 		TransitTripListener tripListener = new TransitTripListener(stageActivityTypes, network);
 		Collection<TransitTripItem> trips = new EventsTransitTripReader(tripListener).readTrips(events);

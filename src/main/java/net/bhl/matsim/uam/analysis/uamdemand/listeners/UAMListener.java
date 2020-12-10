@@ -24,7 +24,7 @@ import org.matsim.contrib.dvrp.fleet.DvrpVehicle;
 import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.network.algorithms.TransportModeNetworkFilter;
 import org.matsim.core.router.MainModeIdentifier;
-import org.matsim.core.router.StageActivityTypes;
+import org.matsim.core.router.StageActivityTypeIdentifier;
 import org.matsim.pt.PtConstants;
 import org.matsim.vehicles.Vehicle;
 
@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class UAMListener implements ActivityStartEventHandler, PersonDepartureEventHandler, PersonArrivalEventHandler,
 		PersonEntersVehicleEventHandler {
-	final private StageActivityTypes stageActivityTypes;
+	final private StageActivityTypeIdentifier stageActivityTypes;
 	final private Network network;
 	final private Collection<UAMDemandItem> uamData = new LinkedList<>();
 	final private Map<Id<Person>, UAMListenerItem> ongoing = new HashMap<>();
@@ -50,7 +50,7 @@ public class UAMListener implements ActivityStartEventHandler, PersonDepartureEv
 	UAMXMLReader uamReader;
 	TransportModeNetworkFilter filter;
 
-	public UAMListener(Network network, String uamConfigFile, StageActivityTypes stageActivityTypes,
+	public UAMListener(Network network, String uamConfigFile, StageActivityTypeIdentifier stageActivityTypes,
 					   MainModeIdentifier mainModeIdentifier, Collection<String> networkRouteModes) {
 		this.network = network;
 		this.stageActivityTypes = stageActivityTypes;

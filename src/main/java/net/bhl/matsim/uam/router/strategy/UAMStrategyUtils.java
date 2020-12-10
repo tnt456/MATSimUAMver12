@@ -162,7 +162,7 @@ public class UAMStrategyUtils {
 					double distanceByPt = 0.0;
 					double timeByPt = 0.0;
 					for (Leg leg : legs) {
-						timeByPt += leg.getTravelTime();
+						timeByPt += leg.getTravelTime().seconds();
 						distanceByPt += leg.getRoute().getDistance();
 					}
 					return new UAMAccessLeg(timeByPt, distanceByPt, null);

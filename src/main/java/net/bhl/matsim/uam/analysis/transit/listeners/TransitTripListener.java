@@ -11,7 +11,7 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.core.api.experimental.events.TeleportationArrivalEvent;
 import org.matsim.core.api.experimental.events.handler.TeleportationArrivalEventHandler;
-import org.matsim.core.router.StageActivityTypes;
+import org.matsim.core.router.StageActivityTypeIdentifier;
 import org.matsim.core.utils.geometry.CoordUtils;
 
 import java.util.*;
@@ -24,21 +24,21 @@ import java.util.*;
 public class TransitTripListener
 		implements ActivityStartEventHandler, ActivityEndEventHandler, PersonDepartureEventHandler,
 		PersonArrivalEventHandler, GenericEventHandler, TeleportationArrivalEventHandler, PersonStuckEventHandler {
-	final private StageActivityTypes stageActivityTypes;
+	final private StageActivityTypeIdentifier stageActivityTypes;
 	final private Network network;
 
 	final private List<TransitTripItem> trips = new LinkedList<>();
 	final private Map<Id<Person>, Integer> tripIndex = new HashMap<>();
 	final private Map<Id<Person>, TransitTripListenerItem> ongoing = new HashMap<>();
 
-	public TransitTripListener(StageActivityTypes stageActivityTypes, Network network) {
+	public TransitTripListener(StageActivityTypeIdentifier stageActivityTypes, Network network) {
 		this.stageActivityTypes = stageActivityTypes;
 		this.network = network;
 	}
 
 	@Override
 	public void handleEvent(ActivityEndEvent event) {
-		if (!stageActivityTypes.isStageActivity(event.getActType())) {
+		if (!StageActivityTypeIdentifier.isStageActivity(event.getActType())) {
 			Integer tripId = tripIndex.get(event.getPersonId());
 
 			if (tripId == null) {
@@ -124,7 +124,7 @@ public class TransitTripListener
 
 	@Override
 	public void handleEvent(ActivityStartEvent event) {
-		if (!stageActivityTypes.isStageActivity(event.getActType())) {
+		if (!StageActivityTypeIdentifier.isStageActivity(event.getActType())) {
 			TransitTripListenerItem item = ongoing.remove(event.getPersonId());
 
 			if (item != null) {

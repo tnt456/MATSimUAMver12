@@ -45,6 +45,7 @@ public class UAMOptimizer implements VrpOptimizer, OnlineTrackerListener, Mobsim
 	public void nextTask(DvrpVehicle vehicle) {
 
 		Schedule schedule = vehicle.getSchedule();
+
 		// this happens at the start of the simulation since
 		// the schedule has not started yet
 		if (schedule.getStatus() != Schedule.ScheduleStatus.STARTED) {
@@ -63,7 +64,8 @@ public class UAMOptimizer implements VrpOptimizer, OnlineTrackerListener, Mobsim
 		if (index < tasks.size()) {
 			nextTask = (UAMTask) tasks.get(index);
 		} else {
-			throw new IllegalStateException("A UAM schedule should never end!");
+			nextTask = (UAMTask) new UAMStayTask(now,vehicle.getServiceEndTime(),vehicle.getStartLink());
+			//throw new IllegalStateException("A UAM schedule should never end!");
 		}
 
 		double startTime = now;
@@ -107,6 +109,7 @@ public class UAMOptimizer implements VrpOptimizer, OnlineTrackerListener, Mobsim
 
 	private void ensureNonFinishingSchedule(Schedule schedule) {
 		UAMTask lastTask = (UAMTask) Schedules.getLastTask(schedule);
+
 
 		if (!(lastTask instanceof UAMStayTask)) {
 			throw new IllegalStateException("A UAM schedule should always end with a STAY task");

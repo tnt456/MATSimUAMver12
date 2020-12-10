@@ -3,7 +3,7 @@ package net.bhl.matsim.uam.schedule;
 import net.bhl.matsim.uam.passenger.UAMRequest;
 import net.bhl.matsim.uam.vrpagent.UAMActionCreator;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.schedule.StayTaskImpl;
+import org.matsim.contrib.dvrp.schedule.StayTask;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,18 +15,19 @@ import java.util.Set;
  *
  * @author balacmi (Milos Balac), RRothfeld (Raoul Rothfeld)
  */
-public class UAMDropoffTask extends StayTaskImpl implements UAMTask {
+public class UAMDropoffTask extends StayTask implements UAMTask {
 	private final Set<UAMRequest> requests = new HashSet<>();
 	private final double deboardingTime;
 
+
 	public UAMDropoffTask(double beginTime, double endTime, Link link, double deboardingTime) {
-		super(beginTime, endTime, link);
+		super(UAMTaskType.DROPOFF, beginTime, endTime, link);
 		this.deboardingTime = deboardingTime;
 	}
 
 	public UAMDropoffTask(double beginTime, double endTime, Link link, double deboardingTime,
 						  Collection<UAMRequest> requests) {
-		super(beginTime, endTime, link);
+		super(UAMTaskType.DROPOFF, beginTime, endTime, link);
 
 		this.requests.addAll(requests);
 		for (UAMRequest request : requests)
@@ -58,7 +59,11 @@ public class UAMDropoffTask extends StayTaskImpl implements UAMTask {
 	@Override
 	public String toString() {
 		return UAMActionCreator.DROPOFF_ACTIVITY_TYPE + "Task(" + (this.getName() != null ? this.getName() : "")
-				+ "@" + this.getLink().getId() + ")" + commonToString();
+				+ "@" + this.getLink().getId() + ")";
+	}
+
+	private String getName() {
+		return null;
 	}
 
 }

@@ -118,7 +118,7 @@ public class UAMSingleRideAppender {
 		schedule.addTask(dropoffFlyTask);
 		schedule.addTask(dropoffTask);
 		schedule.addTask(turnAroundTask);
-		schedule.addTask(new UAMStayTask(turnAroundTask.getEndTime(), scheduleEndTime, turnAroundTask.getLink()));
+		schedule.addTask(new UAMStayTask(turnAroundTask.getEndTime(), Double.POSITIVE_INFINITY, turnAroundTask.getLink()));
 	}
 
 	public void update() {

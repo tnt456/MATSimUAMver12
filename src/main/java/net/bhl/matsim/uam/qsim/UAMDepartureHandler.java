@@ -15,6 +15,7 @@ import org.matsim.core.mobsim.framework.PlanAgent;
 import org.matsim.core.mobsim.qsim.QSim;
 import org.matsim.core.mobsim.qsim.agents.WithinDayAgentUtils;
 import org.matsim.core.mobsim.qsim.interfaces.DepartureHandler;
+import org.matsim.core.mobsim.qsim.interfaces.TripInfoWithRequiredBooking;
 import org.matsim.pt.PtConstants;
 
 import java.util.HashSet;
@@ -69,9 +70,7 @@ public class UAMDepartureHandler implements DepartureHandler {
 				final Leg accessLeg = (Leg) plan.getPlanElements().get(planElementsIndex);
 				final Leg leg = (Leg) plan.getPlanElements().get(planElementsIndex + 2);
 				Activity uam_interaction = (Activity) plan.getPlanElements().get(planElementsIndex + 1);
-				passengerEngine.prebookTrip(now, (MobsimPassengerAgent) agent, leg.getRoute().getStartLinkId(),
-						leg.getRoute().getEndLinkId(), now + uam_interaction.getMaximumDuration()
-								+ (accessLeg.getTravelTime() <= 0 ? 1 : accessLeg.getTravelTime()));
+				passengerEngine.bookTrip((MobsimPassengerAgent) agent,(TripInfoWithRequiredBooking) uam_interaction);
 
 			} else if (agent.getMode().equals(TransportMode.transit_walk)
 					|| agent.getMode().equals(TransportMode.access_walk)) {
@@ -82,9 +81,7 @@ public class UAMDepartureHandler implements DepartureHandler {
 						double travelTime = getTravelTime(plan, planElementsIndex);
 						final Leg uamLeg = getUamLeg(plan, planElementsIndex);
 						Activity uam_interaction = (Activity) plan.getPlanElements().get(planElementsIndex + 1);
-						passengerEngine.prebookTrip(now, (MobsimPassengerAgent) agent,
-								uamLeg.getRoute().getStartLinkId(), uamLeg.getRoute().getEndLinkId(),
-								now + uam_interaction.getMaximumDuration() + (travelTime <= 0 ? 1 : travelTime));
+						passengerEngine.bookTrip((MobsimPassengerAgent) agent, (TripInfoWithRequiredBooking) uam_interaction);
 						bookedTrips.add(agent.getId());
 					}
 				}
@@ -117,7 +114,7 @@ public class UAMDepartureHandler implements DepartureHandler {
 				if (((Leg) pe).getMode().equals(UAMConstants.uam))
 					found = true;
 				else
-					travelTime += ((Leg) pe).getTravelTime();
+					travelTime += ((Leg) pe).getTravelTime().seconds();
 			}
 			index++;
 		}

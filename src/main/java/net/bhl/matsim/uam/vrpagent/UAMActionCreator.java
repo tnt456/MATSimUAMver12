@@ -1,6 +1,7 @@
 package net.bhl.matsim.uam.vrpagent;
 
 import com.google.inject.Inject;
+import net.bhl.matsim.uam.data.UAMFleetData;
 import net.bhl.matsim.uam.passenger.UAMPassengerDropoffActivity;
 import net.bhl.matsim.uam.passenger.UAMPassengerPickupActivity;
 import net.bhl.matsim.uam.run.UAMConstants;
@@ -30,6 +31,9 @@ public class UAMActionCreator implements VrpAgentLogic.DynActionCreator {
 	@Inject
 	@DvrpMode(UAMConstants.uam)
 	private PassengerEngine passengerEngine;
+
+	@Inject(optional = true)
+	private UAMFleetData fleetData;
 
 	@Inject
 	private VrpLegFactory legCreator;

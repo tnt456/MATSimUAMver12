@@ -126,7 +126,7 @@ public class UAMIntermodalRoutingModule implements RoutingModule {
 				String mode = UAMConstants.access + TransportMode.car;
 				Leg carLeg = createCarLeg(accessOriginLink, accessDestinationLink, departureTime, person, routeFactory,
 						populationFactory, mode);
-				currentTime += carLeg.getTravelTime();
+				currentTime += carLeg.getTravelTime().seconds();
 				trip.add(carLeg);
 				break;
 			case TransportMode.pt:
@@ -137,14 +137,14 @@ public class UAMIntermodalRoutingModule implements RoutingModule {
 							new LinkWrapperFacility(uamRoute.bestOriginStation.getLocationLink()), departureTime, person);
 					for (PlanElement leg : legs) {
 						if (leg instanceof Leg)
-							currentTime += ((Leg) leg).getTravelTime();
+							currentTime += ((Leg) leg).getTravelTime().seconds();
 					}
 					trip.addAll(legs);
 				} else {
 					Leg uavPtAccessLeg = createTeleportationLeg(routeFactory, populationFactory,
 							network.getLinks().get(fromFacility.getLinkId()), uamRoute.bestOriginStation.getLocationLink(),
 							uamRoute.accessMode, uamRoute.accessMode);
-					currentTime += uavPtAccessLeg.getTravelTime();
+					currentTime += uavPtAccessLeg.getTravelTime().seconds();
 					trip.add(uavPtAccessLeg);
 				}
 				break;
@@ -152,7 +152,7 @@ public class UAMIntermodalRoutingModule implements RoutingModule {
 				Leg uavAccessLeg = createTeleportationLeg(routeFactory, populationFactory,
 						network.getLinks().get(fromFacility.getLinkId()), uamRoute.bestOriginStation.getLocationLink(),
 						uamRoute.accessMode, UAMConstants.access + uamRoute.accessMode);
-				currentTime += uavAccessLeg.getTravelTime();
+				currentTime += uavAccessLeg.getTravelTime().seconds();
 				trip.add(uavAccessLeg);
 		}
 
@@ -325,12 +325,7 @@ public class UAMIntermodalRoutingModule implements RoutingModule {
 		return carLeg;
 	}
 
-	@Override
-	public StageActivityTypes getStageActivityTypes() {
-		final CompositeStageActivityTypes stageTypes = new CompositeStageActivityTypes();
-		stageTypes.addActivityTypes(new StageActivityTypesImpl(UAMConstants.interaction));
-		return stageTypes;
-	}
+
 
 
 }

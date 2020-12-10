@@ -11,6 +11,8 @@ import org.matsim.core.utils.io.IOUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * This listener copies the input UAM Vehicle file into the output folder after
@@ -26,26 +28,25 @@ public class UAMShutdownListener implements ShutdownListener {
 
 	@Override
 	public void notifyShutdown(ShutdownEvent event) {
-		writeUAMVehiclesFile(event);
+		try {
+			writeUAMVehiclesFile(event);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 	}
 
-	private void writeUAMVehiclesFile(ShutdownEvent event) {
+	private void writeUAMVehiclesFile(ShutdownEvent event) throws MalformedURLException {
 		String configPath = event.getServices().getConfig().getContext().getPath();
 		int index = configPath.lastIndexOf('/');
 		configPath = configPath.substring(0, index + 1).replace("%20", " ");
 
 		String uamFileName = event.getServices().getConfig().getModules().get(UAMConstants.uam).getParams().get("inputUAMFile");
 
-		InputStream fromStream = IOUtils.getInputStream(configPath + uamFileName);
-		OutputStream toStream = IOUtils.getOutputStream(controlerIO.getOutputFilename("output_uam_vehicles.xml.gz"));
+		InputStream fromStream = IOUtils.getInputStream(new URL(configPath + uamFileName));
+		OutputStream toStream = IOUtils.getOutputStream(new URL(controlerIO.getOutputFilename("output_uam_vehicles.xml.gz")),true);
 
 		try {
-			try {
-				IOUtils.copyStream(fromStream, toStream);
-			} catch (IOException ee) {
-				log.warn("writing output UAM Vehicles did not work; probably parameters were such that no events were "
-						+ "generated in the final iteration");
-			}
+			IOUtils.copyStream(fromStream, toStream);
 
 			fromStream.close();
 			toStream.close();

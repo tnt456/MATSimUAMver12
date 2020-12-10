@@ -9,23 +9,28 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <matsim.version>11.0</matsim.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <matsim.version>12.0</matsim.version>
+        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <repositories>
+        <repository>
+            <id>matsim</id>
+            <name>MATSim release repository</name>
+            <url>https://dl.bintray.com/matsim/matsim/</url>
+        </repository>
         <repository>
             <id>matsim-eth</id>
             <url>http://dl.bintray.com/matsim-eth/matsim</url>
         </repository>
         <repository>
-            <id>matsim</id>
-            <name>MATSim release repository</name>
-            <url>http://dl.bintray.com/matsim/matsim</url>
-        </repository>
-        <repository>
             <id>swiss-rail</id>
             <url>https://schweizerischebundesbahnen.bintray.com/simba.mvn</url>
+        </repository>
+        <repository>
+            <id>geotools</id>
+            <url>https://repo.osgeo.org/repository/release/</url>
         </repository>
     </repositories>
 
@@ -37,7 +42,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <version>3.2.0</version>
+                        <version>3.3.0</version>
                         <configuration>
                             <descriptors>
                                 <descriptor>src/main/assembly/assembly-release.xml</descriptor>
@@ -87,22 +92,38 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>2.4</version>
         </dependency>
         <dependency>
             <groupId>org.matsim</groupId>
             <artifactId>matsim</artifactId>
             <version>${matsim.version}</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/student/.m2/repository/org/matsim/matsim/12.0/matsim-12.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>ch.ethz.matsim</groupId>
             <artifactId>baseline_scenario</artifactId>
-            <version>11.0.0</version>
+            <version>0.3.2</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/student/Desktop/Tobias/baseline_scenario-0.3.2.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.matsim.contrib</groupId>
             <artifactId>dvrp</artifactId>
-            <version>${matsim.version}</version>
+            <version>12.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.matsim.contrib/otfvis -->
+        <dependency>
+            <groupId>org.matsim.contrib</groupId>
+            <artifactId>otfvis</artifactId>
+            <version>12.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.matsim.contrib/locationchoice -->
+        <dependency>
+            <groupId>org.matsim.contrib</groupId>
+            <artifactId>locationchoice</artifactId>
+            <version>12.0</version>
         </dependency>
         <dependency>
             <groupId>ch.ethz.matsim</groupId>
@@ -112,12 +133,40 @@
         <dependency>
             <groupId>ch.ethz.matsim</groupId>
             <artifactId>av</artifactId>
-            <version>1.0.3-matsim11</version>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>ch.sbb</groupId>
             <artifactId>matsim-sbb-extensions</artifactId>
             <version>11.6</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-throwingproviders</artifactId>
+            <version>4.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-assistedinject</artifactId>
+            <version>4.2.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/log4j/log4j -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/jfree/jcommon -->
+        <dependency>
+            <groupId>jfree</groupId>
+            <artifactId>jcommon</artifactId>
+            <version>1.0.16</version>
+        </dependency>
+
     </dependencies>
 </project>

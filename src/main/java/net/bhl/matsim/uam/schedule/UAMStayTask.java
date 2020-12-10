@@ -3,7 +3,7 @@ package net.bhl.matsim.uam.schedule;
 import net.bhl.matsim.uam.passenger.UAMRequest;
 import net.bhl.matsim.uam.vrpagent.UAMActionCreator;
 import org.matsim.api.core.v01.network.Link;
-import org.matsim.contrib.dvrp.schedule.StayTaskImpl;
+import org.matsim.contrib.dvrp.schedule.StayTask;
 
 import java.util.Collection;
 
@@ -12,19 +12,15 @@ import java.util.Collection;
  *
  * @author balacmi (Milos Balac), RRothfeld (Raoul Rothfeld)
  */
-public class UAMStayTask extends StayTaskImpl implements UAMTask {
+public class UAMStayTask extends StayTask implements UAMTask {
 	public UAMStayTask(double beginTime, double endTime, Link link, String name) {
-		super(beginTime, endTime, link, name);
+		super(UAMTaskType.STAY, beginTime, endTime, link);
 	}
 
 	public UAMStayTask(double beginTime, double endTime, Link link) {
 		this(beginTime, endTime, link, UAMActionCreator.STAY_ACTIVITY_TYPE);
 	}
 
-	@Override
-	protected String commonToString() {
-		return "[" + getUAMTaskType().toString() + "]" + super.commonToString();
-	}
 
 	@Override
 	public UAMTaskType getUAMTaskType() {
@@ -39,5 +35,9 @@ public class UAMStayTask extends StayTaskImpl implements UAMTask {
 	@Override
 	public void addRequest(UAMRequest request) {
 
+	}
+
+	public String getName() {
+		return "";
 	}
 }
