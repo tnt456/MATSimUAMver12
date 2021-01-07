@@ -16,7 +16,7 @@
 		<!-- Default:1800.0; Defines how many seconds a time mutation can maximally shift a time. -->
 		<param name="mutationRange" value="1800.0" />
 		<!-- false; Use individual settings for each subpopulation. If enabled but no settings are found, regular settings are uses as fallback. -->
-		<param name="useIndividualSettingsForSubpopulations" value="false" />
+		<!--<param name="useIndividualSettingsForSubpopulations" value="false" />-->
 	</module>
 	<module name="changeMode" >
 		<!-- Defines whether car availability is considered be considered or not. An agent has no car only if it has no license, or never access to a car. Default: true -->
@@ -39,7 +39,7 @@
 		<!-- Default=0;  -->
 		<param name="firstIteration" value="0" />
 		<!-- Default=1000;  -->
-		<param name="lastIteration" value="0" />
+		<param name="lastIteration" value="10" />
 		<!-- Defines which mobility simulation will be used. Currently supported: qsim JDEQSim 
 		Depending on the chosen mobsim, you'll have to add additional config modules to configure the corresponding mobsim.
 		For 'qsim', add a module 'qsim' to the config. -->
@@ -96,7 +96,7 @@
 		<param name="coordinateSystem" value="Atlantis" />
 		<param name="insistingOnDeprecatedConfigVersion" value="true" />
 		<!-- "global" number of threads.  This number is used, e.g., for replanning, but NOT in the mobsim.  This can typically be set to as many cores as you have available, or possibly even slightly more. -->
-		<param name="numberOfThreads" value="4" />
+		<param name="numberOfThreads" value="1" />
 		<param name="randomSeed" value="4711" />
 	</module>
 	<module name="households" >
@@ -395,11 +395,12 @@
 		<!-- (not tested) will remove plan attributes that are presumably not used, such as activityStartTime. default=false. Use with Caution! -->
 		<param name="removingUnnecessaryPlanAttributes" value="false" />
 		<!-- Name of the (Object)Attribute defining the subpopulation to which pertains a Person (as freight, through traffic, etc.). The attribute must be of String type.  Change away from default only in desperate situations. -->
-		<param name="subpopulationAttributeName" value="subpopulation" />
+		<!--<param name="subpopulationAttributeName" value="subpopulation" />-->
 	</module>
 	<module name="planscalcroute" >
 		<!-- All the modes for which the router is supposed to generate network routes (like car) -->
 		<param name="networkModes" value="car" />
+		<param name="routingRandomness" value="0" />
 		<parameterset type="teleportedModeParameters" >
 			<param name="beelineDistanceFactor" value="1.0" />
 			<param name="mode" value="walk" />
@@ -445,7 +446,7 @@
 		<!-- Shortens a link in the visualization, i.e. its start and end point are moved into towards the center. Does not affect traffic flow.  -->
 		<param name="nodeOffset" value="0.0" />
 		<!-- Number of threads used for the QSim.  Note that this setting is independent from the "global" threads setting.  In contrast to earlier versions, the non-parallel special version is no longer there. -->
-		<param name="numberOfThreads" value="4" />
+		<param name="numberOfThreads" value="1" />
 		<!-- Boolean. `true': stuck vehicles are removed, aborting the plan; `false': stuck vehicles are forced into the next link. `false' is probably the better choice. -->
 		<param name="removeStuckVehicles" value="false" />
 		<!-- If link dynamics is set as SeepageQ, set a seep mode. Default is bike. -->
@@ -453,7 +454,7 @@
 		<!-- Possible values: minOfEndtimeAndMobsimFinished, onlyUseEndtime -->
 		<param name="simEndtimeInterpretation" value="null" />
 		<!-- Options: maxOfStarttimeAndEarliestActivityEnd onlyUseStarttime  -->
-		<param name="simStarttimeInterpretation" value="maxOfStarttimeAndEarliestActivityEnd" />
+		<param name="simStarttimeInterpretation" value="onlyUseStarttime" />
 		<!-- snapshotStyle. One of: equiDist queue withHoles withHolesAndShowHoles kinematicWaves  -->
 		<param name="snapshotStyle" value="equiDist" />
 		<param name="snapshotperiod" value="00:00:00" />

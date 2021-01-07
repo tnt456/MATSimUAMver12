@@ -119,8 +119,8 @@ public class UAMXMLReader extends MatsimXmlParser {
 
 					UAMVehicle vehicle = new UAMVehicle(fleetSpecification.getVehicleSpecifications().get(id),
 							this.stations.get(stationid).getLocationLink(), stationid, vehicleTypes.get(vehicleTypeId));
-					vehicle.getSchedule().addTask(new UAMStayTask(vehicle.getServiceBeginTime(), Double.POSITIVE_INFINITY, vehicle.getStartLink()));
-
+					vehicle.getSchedule().addTask(new UAMStayTask(vehicle.getServiceBeginTime(), 19000, vehicle.getStartLink()));
+					vehicle.getSchedule().addTask(new UAMStayTask(19000,vehicle.getServiceEndTime(),vehicle.getStartLink()));
 					vehicles.put(id, vehicle);
 					UAMVehicle vehicleCopy = new UAMVehicle(fleetSpecification.getVehicleSpecifications().get(id),
 							this.stations.get(stationid).getLocationLink(), stationid, vehicleTypes.get(vehicleTypeId));

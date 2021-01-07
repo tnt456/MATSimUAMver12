@@ -64,8 +64,8 @@ public class UAMOptimizer implements VrpOptimizer, OnlineTrackerListener, Mobsim
 		if (index < tasks.size()) {
 			nextTask = (UAMTask) tasks.get(index);
 		} else {
-			nextTask = (UAMTask) new UAMStayTask(now,vehicle.getServiceEndTime(),vehicle.getStartLink());
-			//throw new IllegalStateException("A UAM schedule should never end!");
+			//nextTask = (UAMTask) new UAMStayTask(now,vehicle.getServiceEndTime(),vehicle.getStartLink());
+			throw new IllegalStateException("A UAM schedule should never end!");
 		}
 
 		double startTime = now;

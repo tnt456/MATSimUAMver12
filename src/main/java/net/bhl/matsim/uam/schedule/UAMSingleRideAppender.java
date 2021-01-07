@@ -63,6 +63,7 @@ public class UAMSingleRideAppender {
 		double now = task.time;
 		Schedule schedule = vehicle.getSchedule();
 
+
 		UAMStayTask stayTask = (UAMStayTask) Schedules.getLastTask(schedule);
 		boolean requiresPickupFlight = !stayTask.getLink().getId().equals(request.getFromLink().getId());
 
@@ -118,7 +119,7 @@ public class UAMSingleRideAppender {
 		schedule.addTask(dropoffFlyTask);
 		schedule.addTask(dropoffTask);
 		schedule.addTask(turnAroundTask);
-		schedule.addTask(new UAMStayTask(turnAroundTask.getEndTime(), Double.POSITIVE_INFINITY, turnAroundTask.getLink()));
+		schedule.addTask(new UAMStayTask(turnAroundTask.getEndTime(), scheduleEndTime, turnAroundTask.getLink()));
 	}
 
 	public void update() {

@@ -4,6 +4,7 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.contrib.dvrp.fleet.DvrpVehicleImpl;
 import org.matsim.contrib.dvrp.fleet.DvrpVehicleSpecification;
+import org.matsim.contrib.dvrp.schedule.Schedule;
 
 /**
  * This class defines the VTOL vehicle and its properties.
@@ -20,6 +21,10 @@ public class UAMVehicle extends DvrpVehicleImpl {
 		super(specification, startLink);
 		this.initialStationId = stationId;
 		this.vehicleType = vehicleType;
+	}
+
+	public void setSchedule(Schedule schedule){
+		
 	}
 
 	public Id<UAMStation> getInitialStationId() {
